@@ -432,76 +432,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
     </div>
 
 
+    <script src="js/login.js"></script>
     <script>
+        // Handle form visibility on page load based on errors
         document.addEventListener('DOMContentLoaded', function() {
-        <?php if (!empty($signup_error)): ?>
-            // Show signup tab, hide login tab
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('login-form').style.display = 'none';
-
-            document.getElementById('tab-signup').classList.add('active');
-            document.getElementById('signup-form').style.display = 'block';
-        <?php elseif (!empty($login_error)): ?>
-            // Show login tab, hide signup tab (optional, if you want)
-            document.getElementById('tab-login').classList.add('active');
-            document.getElementById('login-form').style.display = 'block';
-
-            document.getElementById('tab-signup').classList.remove('active');
-            document.getElementById('signup-form').style.display = 'none';
-        <?php endif; ?>
-    });
-        const formContainer = document.getElementById("formContainer");
-        const loginBtn = document.getElementById("loginBtn");
-        const signupBtn = document.getElementById("signupBtn");
-
-        /*TERMS and PRIVACY POLICY*/
-        const termsLink = document.getElementById("termsLink");
-        const termsModal = document.getElementById("termsModal");
-        const closeButton = document.querySelector(".close-button");
-
-        termsLink.addEventListener("click", function (e) {
-            e.preventDefault();
-            termsModal.style.display = "flex";
+            <?php if (!empty($signup_error)): ?>
+                // Show signup tab if there was a signup error
+                const formContainer = document.getElementById("formContainer");
+                const signupBtn = document.getElementById("signupBtn");
+                const loginBtn = document.getElementById("loginBtn");
+                formContainer.style.transform = "translateX(-50%)";
+                signupBtn.classList.add("active");
+                loginBtn.classList.remove("active");
+            <?php endif; ?>
         });
-
-        closeButton.addEventListener("click", function () {
-            termsModal.style.display = "none";
-        });
-
-        window.addEventListener("click", function (e) {
-            if (e.target === termsModal) {
-            termsModal.style.display = "none";
-            }
-        });
-        
-        loginBtn.addEventListener("click", () => {
-        formContainer.style.transform = "translateX(0%)";
-        loginBtn.classList.add("active");
-        signupBtn.classList.remove("active");
-        });
-
-        signupBtn.addEventListener("click", () => {
-        formContainer.style.transform = "translateX(-50%)";
-        signupBtn.classList.add("active");
-        loginBtn.classList.remove("active");
-        });
-
-        function setupToggle(toggleId, inputId) {
-        const toggle = document.getElementById(toggleId);
-        const input = document.getElementById(inputId);
-
-        toggle.addEventListener("click", function () {
-        const isPassword = input.getAttribute("type") === "password";
-        input.setAttribute("type", isPassword ? "text" : "password");
-        toggle.src = isPassword
-            ? "https://cdn-icons-png.flaticon.com/512/159/159604.png" // eye-slash
-            : "https://cdn-icons-png.flaticon.com/512/565/565655.png"; // eye
-        });
-    }
-
-    setupToggle("toggleLoginPassword", "loginPassword");
-    setupToggle("toggleSignupPassword", "signupPassword");
-    setupToggle("toggleConfirmPassword", "confirmPassword");
     </script>
     </body>
 </html>
