@@ -54,13 +54,6 @@ function setupLoginForm() {
             return;
         }
         
-        // Get reCAPTCHA token
-        const recaptchaToken = grecaptcha.getResponse(getRecaptchaIndex('loginRecaptcha'));
-        if (!recaptchaToken) {
-            showMessage(messageEl, 'Please complete the reCAPTCHA', 'error');
-            return;
-        }
-        
         try {
             const response = await fetch('api/client-login.php', {
                 method: 'POST',
@@ -70,8 +63,7 @@ function setupLoginForm() {
                 credentials: 'include',
                 body: JSON.stringify({
                     login_id: login_id,
-                    login_password: password,
-                    recaptcha_token: recaptchaToken
+                    login_password: password
                 })
             });
             
@@ -88,7 +80,6 @@ function setupLoginForm() {
                 }, 1500);
             } else {
                 showMessage(messageEl, data.message, 'error');
-                grecaptcha.reset(getRecaptchaIndex('loginRecaptcha'));
             }
         } catch (error) {
             showMessage(messageEl, 'An error occurred. Please try again.', 'error');
@@ -129,12 +120,6 @@ function setupSignupForm() {
         }
         
         // Get reCAPTCHA token
-        const recaptchaToken = grecaptcha.getResponse(getRecaptchaIndex('signupRecaptcha'));
-        if (!recaptchaToken) {
-            showMessage(messageEl, 'Please complete the reCAPTCHA', 'error');
-            return;
-        }
-        
         try {
             const response = await fetch('api/client-signup.php', {
                 method: 'POST',
@@ -149,9 +134,7 @@ function setupSignupForm() {
                     email: email,
                     contact_number: contact_number,
                     password: password,
-                    confirm_password: confirm_password,
-                    recaptcha_token: recaptchaToken
-                })
+                    confirm_password: confirm_password
             });
             
             const data = await response.json();
@@ -167,9 +150,7 @@ function setupSignupForm() {
                 }, 1500);
             } else {
                 showMessage(messageEl, data.message, 'error');
-                grecaptcha.reset(getRecaptchaIndex('signupRecaptcha'));
-            }
-        } catch (error) {
+            tch (error) {
             showMessage(messageEl, 'An error occurred. Please try again.', 'error');
             console.error('Signup error:', error);
         }
@@ -204,8 +185,3 @@ function showMessage(element, message, type) {
 }
 
 function getRecaptchaIndex(elementId) {
-    // This is a simplified approach. In production, you might need a more robust solution
-    const element = document.getElementById(elementId);
-    const index = Array.from(document.querySelectorAll('.g-recaptcha')).indexOf(element);
-    return index >= 0 ? index : 0;
-}

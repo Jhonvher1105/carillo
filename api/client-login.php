@@ -9,21 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $data = json_decode(file_get_contents('php://input'), true);
         
-        // Validate reCaptcha
-        $recaptcha_response = $data['recaptcha_token'] ?? '';
-        $secret_key = '6LdjTTIrAAAAABqMWpLh2ZM2BPq1F9MJRnk0DARF';
-        $verify_url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response";
-        
-        $recaptcha_result = file_get_contents($verify_url);
-        $recaptcha_data = json_decode($recaptcha_result, true);
-        
-        if (empty($recaptcha_response) || intval($recaptcha_data["success"]) !== 1) {
-            $response['message'] = 'reCaptcha verification failed. Please complete the reCAPTCHA and try again.';
-            error_log("Login failed - reCaptcha verification failed");
-            echo json_encode($response);
-            exit();
-        }
-        
         $login_id = trim($data['login_id'] ?? '');
         $password = $data['login_password'] ?? '';
         
